@@ -1,0 +1,25 @@
+{
+  "name": "PDF Ultra Pro — Free Online PDF Tools",
+  "short_name": "PDF Ultra Pro",
+  "description": "Merge, split, compress, convert and edit PDFs entirely in your browser. Nothing is ever uploaded to a server.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0B0E1A",
+  "theme_color": "#6C4CF0",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

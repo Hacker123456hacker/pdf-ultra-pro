@@ -1,0 +1,11 @@
+# Security headers for static hosts that read this file (Netlify, Cloudflare Pages).
+# GitHub Pages does NOT support custom response headers — if you deploy there,
+# put this project behind Cloudflare (free tier) or another CDN/proxy that lets
+# you attach response headers, or switch hosts. See assets/security-headers.md.
+
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self' https://cdnjs.cloudflare.com; worker-src 'self' blob: https://cdnjs.cloudflare.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'

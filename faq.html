@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ \u2014 PDF Ultra Pro</title>
+<meta name="description" content="Answers to common questions about PDF Ultra Pro: privacy, file size limits, supported browsers and more.">
+<link rel="canonical" href="https://pdfultrapro.example.com/faq.html">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6C4CF0">
+<link rel="stylesheet" href="css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Is my file uploaded anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. Processing happens locally in your browser using JavaScript libraries; there is no server upload."}},
+    {"@type":"Question","name":"Is it free?","acceptedAnswer":{"@type":"Answer","text":"Yes, every tool is free to use with no account required."}}
+  ]
+}
+</script>
+</head>
+<body>
+<div id="site-header"></div>
+<main id="main-content">
+  <div class="container">
+    <div class="page-hero">
+      <span class="eyebrow">FAQ</span>
+      <h1>Frequently asked questions</h1>
+    </div>
+  </div>
+  <section class="section section-tight">
+    <div class="container prose">
+
+      <h2>Privacy &amp; security</h2>
+      <details class="faq-item" open>
+        <summary class="faq-q">Do you store or see my files?<span class="chev" aria-hidden="true">▾</span></summary>
+        <div class="faq-a"><p>No. There's no server component to this site's core tools \u2014 files are read with your browser's File API, processed in memory using JavaScript libraries, and the result is offered back to you as a download. Nothing is transmitted anywhere.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">Can I use this offline?<span class="chev" aria-hidden="true">▾</span></summary>
+        <div class="faq-a"><p>After your first visit, PDF Ultra Pro can be installed as a lightweight app and used offline for previously cached tools, thanks to its service worker and web app manifest.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">Is it safe to process sensitive documents here?<span class="chev" aria-hidden="true">▾</span></summary>
+        <div class="faq-a"><p>Because nothing leaves your device, sensitive documents never cross a network in the first place. That said, always keep your own device and browser up to date, since that's the boundary that matters here.</p></div>
+      </details>
+
+      <h2>Limits &amp; compatibility</h2>
+      <details class="faq-item">
+        <summary class="faq-q">What's the maximum file size?<span class="chev" aria-hidden="true">▾</span></summary>
+        <div class="faq-a"><p>100MB per file, and up to 40 files in a batch for tools that support multiple files. These limits exist to keep your browser responsive, since processing uses your device's own memory.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">Which browsers are supported?<span class="chev" aria-hidden="true">▾</span></summary>
+        <div class="faq-a"><p>Current versions of Chrome, Firefox, Edge and Safari, on both desktop and mobile.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">Why can't I selectable-text after using Compress PDF?<span class="chev" aria-hidden="true">▾</span></summary>
+        <div class="faq-a"><p>Compress PDF works by re-rendering each page as a compressed image, which is what makes it effective on scanned or image-heavy PDFs. That process rasterizes any text, so it's not the right tool if you need to keep selectable, searchable text \u2014 in that case, try reducing embedded image size manually instead.</p></div>
+      </details>
+
+      <h2>Missing tools</h2>
+      <details class="faq-item">
+        <summary class="faq-q">Why isn't Protect/Unlock PDF available yet?<span class="chev" aria-hidden="true">▾</span></summary>
+        <div class="faq-a"><p>Real PDF password protection and removal require robust encryption support that isn't reliably available in the open-source libraries this site uses client-side. We'd rather mark it "Coming soon" than ship something that doesn't actually protect your file.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">Why can't I convert Word/Excel/PowerPoint files?<span class="chev" aria-hidden="true">▾</span></summary>
+        <div class="faq-a"><p>Faithfully converting office formats to PDF typically requires a full layout engine (like the one inside Word or LibreOffice). That's not something we can do accurately and safely without a server, so it's on our roadmap rather than in the current tool set.</p></div>
+      </details>
+
+      <h2>Still stuck?</h2>
+      <p>Reach out on the <a href="contact.html">Contact page</a> and we'll get back to you.</p>
+    </div>
+  </section>
+</main>
+<div id="site-footer"></div>
+<script src="js/theme.js"></script>
+<script src="js/partials.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

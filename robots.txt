@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pdfultrapro.example.com/sitemap.xml
+Sitemap: https://pdf-ultra-pro.pages.dev/sitemap.xml

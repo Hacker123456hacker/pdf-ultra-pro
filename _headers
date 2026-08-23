@@ -3,6 +3,14 @@
 # put this project behind Cloudflare (free tier) or another CDN/proxy that lets
 # you attach response headers, or switch hosts. See assets/security-headers.md.
 
+/sitemap.xml
+  Content-Type: application/xml; charset=UTF-8
+  X-Content-Type-Options: nosniff
+
+/robots.txt
+  Content-Type: text/plain; charset=UTF-8
+  X-Content-Type-Options: nosniff
+
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff

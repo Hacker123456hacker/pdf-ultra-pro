@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Extract Images Online Free — No Upload Needed | PDF Ultra Pro</title>
-<meta name="description" content="Pull every embedded image out of a PDF file. 100% free, works entirely in your browser — your files are never uploaded to a server.">
+<meta name="description" content="Pull every embedded image out of a PDF file. If a PDF has no separate embedded images, export its pages as JPGs. 100% free, works entirely in your browser.">
 <link rel="canonical" href="https://pdf-ultra-pro.pages.dev/extract-images.html">
 <meta name="robots" content="index, follow">
 <meta property="og:title" content="Extract Images | PDF Ultra Pro">
-<meta property="og:description" content="Pull every embedded image out of a PDF file.">
+<meta property="og:description" content="Extract embedded images or export PDF pages as JPGs.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://pdf-ultra-pro.pages.dev/extract-images.html">
 <meta property="og:image" content="images/og-image.svg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Extract Images | PDF Ultra Pro">
-<meta name="twitter:description" content="Pull every embedded image out of a PDF file.">
+<meta name="twitter:description" content="Extract embedded images or export PDF pages as JPGs.">
 <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/icon-192.svg">
 <link rel="manifest" href="manifest.json">
@@ -28,7 +28,7 @@
   "applicationCategory": "Utility",
   "operatingSystem": "Any (runs in browser)",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-  "description": "Pull every embedded image out of a PDF file."
+  "description": "Extract embedded images from PDFs or export PDF pages as JPGs when no embedded image objects are available."
 }
 </script>
 </head>
@@ -42,7 +42,7 @@
     <header class="tool-header">
       <div class="tool-icon" aria-hidden="true"></div>
       <h1>Extract Images</h1>
-      <p>Pull every embedded image out of a PDF file.</p>
+      <p>Extract embedded images from your PDF. If none are embedded separately, each PDF page can be exported as a JPG.</p>
     </header>
     <div id="tool-app" class="tool-app" aria-live="polite"><p class="hint text-center">Loading tool…</p></div>
     <div class="ad-slot ad-banner ad-in-article" role="complementary" aria-label="Advertisement placeholder">Advertisement placeholder — Google AdSense in-article unit</div>
@@ -59,6 +59,7 @@
 <script src="js/partials.js"></script>
 <script src="js/pdf-engine.js"></script>
 <script src="js/tools.js"></script>
+<script src="js/extract-images-fallback.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

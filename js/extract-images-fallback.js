@@ -1,14 +1,47 @@
-/* Extract Images — embedded-image extraction only
- * Never treats whole PDF pages as "images".
+/* Extract Images — embedded-image extraction + image-free PDF
  * Everything stays local in the browser.
  */
 "use strict";
 
 (function () {
+  async function buildTextOnlyPdf(pdfJsDoc, report) {
+    if (!window.jspdf || !window.jspdf.jsPDF) return null;
+
+    const JsPDF = window.jspdf.jsPDF;
+    const out = new JsPDF({ unit: "pt", compress: true });
+    let hasText = false;
+
+    for (let i = 1; i <= pdfJsDoc.numPages; i++) {
+      const page = await pdfJsDoc.getPage(i);
+      const viewport = page.getViewport({ scale: 1 });
+      if (i > 1) out.addPage([viewport.width, viewport.height]);
+      else {
+        out.deletePage(1);
+        out.addPage([viewport.width, viewport.height]);
+      }
+
+      const textContent = await page.getTextContent();
+      for (const item of textContent.items || []) {
+        if (!item || typeof item.str !== "string" || !item.str.trim()) continue;
+        const t = item.transform || [1, 0, 0, 1, 0, 0];
+        const x = Number(t[4]) || 0;
+        const y = viewport.height - (Number(t[5]) || 0);
+        const size = Math.max(4, Math.min(96, Math.sqrt((t[0] || 1) ** 2 + (t[1] || 0) ** 2)));
+        out.setFont("helvetica", "normal");
+        out.setFontSize(size);
+        out.text(item.str, x, y, { baseline: "alphabetic" });
+        hasText = true;
+      }
+      report(70 + (i / pdfJsDoc.numPages) * 20, `Creating image-free PDF page ${i} of ${pdfJsDoc.numPages}…`);
+    }
+
+    if (!hasText) return null;
+    return new Blob([out.output("arraybuffer")], { type: "application/pdf" });
+  }
+
   function imageToBlob(img) {
     return new Promise(async (resolve, reject) => {
       try {
-        // PDF.js may expose an ImageBitmap for decoded PDF images.
         if (img && img.bitmap) {
           const canvas = document.createElement("canvas");
           canvas.width = img.width || img.bitmap.width;
@@ -31,7 +64,6 @@
         const src = img.data;
         const rgba = new Uint8ClampedArray(img.width * img.height * 4);
 
-        // PDF.js ImageKind values: 1 = 1bpp gray, 2 = RGB, 3 = RGBA.
         if (img.kind === 3 || src.length === img.width * img.height * 4) {
           rgba.set(src);
         } else if (img.kind === 2 || src.length === img.width * img.height * 3) {
@@ -42,9 +74,8 @@
             rgba[j + 3] = 255;
           }
         } else {
-          // Handle 1-bit grayscale masks.
-          let p = 0;
           const rowBytes = Math.ceil(img.width / 8);
+          let p = 0;
           for (let y = 0; y < img.height; y++) {
             for (let x = 0; x < img.width; x++) {
               const bit = (src[y * rowBytes + (x >> 3)] >> (7 - (x & 7))) & 1;
@@ -69,7 +100,6 @@
     const results = [];
     const seen = new Set();
 
-    // First use the existing extractor if it can return real embedded images.
     if (typeof originalProcess === "function") {
       try {
         const result = await originalProcess(ws, report);
@@ -79,10 +109,8 @@
       } catch (_) {}
     }
 
-    // PDF.js operator-list extraction. This gets the actual image objects
-    // used by the PDF, not screenshots of complete pages.
     for (let pageNo = 1; pageNo <= doc.numPages; pageNo++) {
-      report(5 + (pageNo / doc.numPages) * 80, `Finding images on page ${pageNo} of ${doc.numPages}…`);
+      report(5 + (pageNo / doc.numPages) * 65, `Finding images on page ${pageNo} of ${doc.numPages}…`);
       const page = await doc.getPage(pageNo);
       const opList = await page.getOperatorList();
       const imageFns = new Set([
@@ -108,9 +136,7 @@
             blob,
             filename: `image-${String(results.length + 1).padStart(3, "0")}.png`
           });
-        } catch (_) {
-          // Ignore unsupported/mask-only image objects and continue.
-        }
+        } catch (_) {}
       }
     }
 
@@ -128,7 +154,7 @@
       cfg._originalExtractImagesProcess = cfg.process;
     }
 
-    cfg.desc = "Extract only the actual embedded images from a PDF. Download each image separately or download them all as a ZIP.";
+    cfg.desc = "Extract actual embedded images separately, download all images as a ZIP, and create a text-only PDF without embedded images when possible.";
 
     cfg.process = async function (ws, report) {
       report(3, "Reading PDF…");
@@ -136,19 +162,40 @@
       const doc = await PDFEngine.loadPdfJsDoc(buf);
       const images = await extractEmbeddedImages(doc, cfg._originalExtractImagesProcess, ws, report);
 
-      if (!images.length) {
-        throw new Error("No embedded images were found in this PDF. This tool does not convert whole PDF pages into JPG files.");
+      // Images are optional. We still create the image-free PDF when the source
+      // PDF contains selectable text, even if no embedded images were found.
+      let textOnlyPdf = null;
+      try {
+        report(75, "Creating image-free PDF…");
+        textOnlyPdf = await buildTextOnlyPdf(doc, report);
+      } catch (_) {}
+
+      if (!images.length && !textOnlyPdf) {
+        throw new Error("No embedded images were found, and this PDF contains no selectable text from which an image-free PDF can be created.");
       }
 
-      report(90, "Packaging images…");
-      const zip = await downloadsAsZipOrSequence(
-        images,
-        renameFile(ws.files[0].name, "extracted-images", "zip")
-      );
+      const downloads = [];
+      if (images.length) {
+        report(90, "Packaging images…");
+        const zip = await downloadsAsZipOrSequence(
+          images,
+          renameFile(ws.files[0].name, "extracted-images", "zip")
+        );
+        downloads.push(...images, ...zip);
+      }
+
+      if (textOnlyPdf) {
+        downloads.push({
+          blob: textOnlyPdf,
+          filename: renameFile(ws.files[0].name, "without-images", "pdf")
+        });
+      }
 
       return {
-        message: `Found ${images.length} embedded image${images.length === 1 ? "" : "s"}. You can download each image separately or download all images as a ZIP.`,
-        downloads: [...images, ...zip]
+        message: images.length
+          ? `Found ${images.length} embedded image${images.length === 1 ? "" : "s"}. You can download each image separately, download all images as a ZIP, and download a PDF without embedded images.`
+          : "No embedded images were found. A PDF without images was created from the selectable text.",
+        downloads
       };
     };
   }

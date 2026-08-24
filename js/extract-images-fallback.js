@@ -1,13 +1,104 @@
-/* Extract Images compatibility fallback
- * Some PDFs (especially scanned/generated PDFs) contain image data that
- * PDF.js does not expose through the simple paintImageXObject path.
- * This implementation never leaves the user with the misleading
- * "No embedded images were found" error: if direct extraction does not
- * produce an image, the PDF page itself is rendered to a JPG locally.
+/* Extract Images compatibility + image-free PDF export
+ * Everything stays local in the browser.
  */
 "use strict";
 
 (function () {
+  async function buildTextOnlyPdf(pdfJsDoc, report) {
+    if (!window.jspdf || !window.jspdf.jsPDF) return null;
+
+    const JsPDF = window.jspdf.jsPDF;
+    const out = new JsPDF({ unit: "pt", compress: true });
+    let hasText = false;
+
+    for (let i = 1; i <= pdfJsDoc.numPages; i++) {
+      const page = await pdfJsDoc.getPage(i);
+      const viewport = page.getViewport({ scale: 1 });
+      if (i > 1) out.addPage([viewport.width, viewport.height]);
+      else {
+        // Replace the default first page with the source page dimensions.
+        out.deletePage(1);
+        out.addPage([viewport.width, viewport.height]);
+      }
+
+      const textContent = await page.getTextContent();
+      for (const item of textContent.items || []) {
+        if (!item || typeof item.str !== "string" || !item.str.trim()) continue;
+        const t = item.transform || [1, 0, 0, 1, 0, 0];
+        const x = Number(t[4]) || 0;
+        const y = viewport.height - (Number(t[5]) || 0);
+        const size = Math.max(4, Math.min(96, Math.sqrt((t[0] || 1) ** 2 + (t[1] || 0) ** 2)));
+        out.setFont("helvetica", "normal");
+        out.setFontSize(size);
+        out.text(item.str, x, y, { baseline: "alphabetic" });
+        hasText = true;
+      }
+      report(70 + (i / pdfJsDoc.numPages) * 20, `Creating image-free PDF page ${i} of ${pdfJsDoc.numPages}…`);
+    }
+
+    if (!hasText) return null;
+    return new Blob([out.output("arraybuffer")], { type: "application/pdf" });
+  }
+
+  async function extractImagesAndFallback(ws, report, originalProcess) {
+    let imageDownloads = [];
+
+    if (typeof originalProcess === "function") {
+      try {
+        const result = await originalProcess(ws, report);
+        if (result && Array.isArray(result.downloads) && result.downloads.length) {
+          imageDownloads = result.downloads;
+        }
+      } catch (_) {
+        // If embedded-image extraction fails, render PDF pages below.
+      }
+    }
+
+    const buf = await PDFEngine.readAsArrayBuffer(ws.files[0]);
+    const doc = await PDFEngine.loadPdfJsDoc(buf);
+
+    // If no embedded images were extracted, export each page as JPG.
+    if (!imageDownloads.length) {
+      for (let i = 1; i <= doc.numPages; i++) {
+        report(5 + (i / doc.numPages) * 55, `Rendering page ${i} of ${doc.numPages}…`);
+        const canvas = await PDFEngine.renderPageToCanvas(doc, i, 1.75);
+        const blob = await PDFEngine.canvasToBlob(canvas, "image/jpeg", 0.94);
+        imageDownloads.push({
+          blob,
+          filename: renameFile(ws.files[0].name, `page-${i}`, "jpg"),
+        });
+      }
+    }
+
+    if (!imageDownloads.length) {
+      throw new Error("This PDF has no pages that can be exported as images.");
+    }
+
+    // Add a ZIP containing all extracted/rendered images.
+    const zipDownloads = await downloadsAsZipOrSequence(
+      imageDownloads,
+      renameFile(ws.files[0].name, "images", "zip")
+    );
+
+    report(72, "Creating image-free PDF…");
+    const textOnlyPdf = await buildTextOnlyPdf(doc, report);
+
+    const downloads = [...imageDownloads, ...zipDownloads];
+    if (textOnlyPdf) {
+      downloads.push({
+        blob: textOnlyPdf,
+        filename: renameFile(ws.files[0].name, "without-images", "pdf"),
+      });
+    }
+
+    return {
+      message: textOnlyPdf
+        ? `Extracted ${imageDownloads.length} image${imageDownloads.length === 1 ? "" : "s"}. Individual images, a ZIP, and an image-free text PDF are ready. All processing was local.`
+        : `Extracted ${imageDownloads.length} image${imageDownloads.length === 1 ? "" : "s"}. Individual images and a ZIP are ready. This PDF contains no selectable text, so an image-free text PDF could not be created.` ,
+      downloads,
+    };
+  }
+
   function install() {
     if (typeof TOOL_CONFIGS === "undefined" || !TOOL_CONFIGS["extract-images"]) {
       setTimeout(install, 25);
@@ -15,57 +106,13 @@
     }
 
     const cfg = TOOL_CONFIGS["extract-images"];
-
-    // Preserve an existing implementation only once. This lets us use it
-    // when it succeeds, while still guaranteeing a page-render fallback.
     if (!cfg._originalExtractImagesProcess && typeof cfg.process === "function") {
       cfg._originalExtractImagesProcess = cfg.process;
     }
 
-    cfg.desc = "Extract images from a PDF. If the PDF format does not expose separate embedded images, export each page as a JPG.";
-
-    cfg.process = async function (ws, report) {
-      report(3, "Reading PDF…");
-
-      if (typeof cfg._originalExtractImagesProcess === "function") {
-        try {
-          const result = await cfg._originalExtractImagesProcess(ws, report);
-          if (result && Array.isArray(result.downloads) && result.downloads.length) {
-            return result;
-          }
-        } catch (_) {
-          // Fall through to page rendering.
-        }
-      }
-
-      const buf = await PDFEngine.readAsArrayBuffer(ws.files[0]);
-      const doc = await PDFEngine.loadPdfJsDoc(buf);
-      const outputs = [];
-
-      for (let i = 1; i <= doc.numPages; i++) {
-        report(5 + (i / doc.numPages) * 85, `Rendering page ${i} of ${doc.numPages}…`);
-        const canvas = await PDFEngine.renderPageToCanvas(doc, i, 1.75);
-        const blob = await PDFEngine.canvasToBlob(canvas, "image/jpeg", 0.94);
-        outputs.push({
-          blob,
-          filename: renameFile(ws.files[0].name, `page-${i}`, "jpg"),
-        });
-      }
-
-      if (!outputs.length) {
-        throw new Error("This PDF has no pages that can be exported as images.");
-      }
-
-      report(94, "Packaging images…");
-      const downloads = await downloadsAsZipOrSequence(
-        outputs,
-        renameFile(ws.files[0].name, "images", "zip")
-      );
-
-      return {
-        message: `Exported ${outputs.length} PDF page${outputs.length === 1 ? "" : "s"} as JPG image${outputs.length === 1 ? "" : "s"}. Everything was processed locally in your browser.`,
-        downloads,
-      };
+    cfg.desc = "Extract every image separately, download all images as a ZIP, and create a text-only PDF without embedded images when possible.";
+    cfg.process = function (ws, report) {
+      return extractImagesAndFallback(ws, report, cfg._originalExtractImagesProcess);
     };
   }
 

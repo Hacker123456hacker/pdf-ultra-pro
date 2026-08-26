@@ -1,12 +1,11 @@
 /**
- * sw.js — minimal offline cache for PDF Ultra Pro's own static shell.
- * Deliberately does NOT cache third-party CDN library scripts (pdf-lib,
- * pdf.js, etc.) so those always get normal browser HTTP caching/updates,
- * and never intercepts anything that isn't a same-origin GET request.
+ * sw.js — lightweight offline cache for PDF Ultra Pro.
+ * HTML navigations prefer the network so updated pages and navigation links
+ * are not trapped in a stale/broken cache entry.
  */
 "use strict";
 
-const CACHE_NAME = "pup-shell-v1";
+const CACHE_NAME = "pup-shell-v2";
 const CORE_ASSETS = [
   "index.html",
   "all-tools.html",
@@ -29,7 +28,9 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))
+    )
   );
   self.clients.claim();
 });
@@ -38,19 +39,32 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return; // never touch third-party CDN requests
+  if (url.origin !== self.location.origin) return;
+
+  // Navigation requests must use the live site first. This prevents a stale
+  // cached all-tools.html (or another HTML page) from causing broken links.
+  if (req.mode === "navigate" || req.destination === "document") {
+    event.respondWith(
+      fetch(req).then((response) => {
+        if (response && response.status === 200) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
+        }
+        return response;
+      }).catch(() => caches.match(req).then((cached) => cached || caches.match("index.html")))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(req).then((cached) => {
-      const network = fetch(req)
-        .then((res) => {
-          if (res && res.status === 200) {
-            const copy = res.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
-          }
-          return res;
-        })
-        .catch(() => cached);
+      const network = fetch(req).then((response) => {
+        if (response && response.status === 200) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
+        }
+        return response;
+      }).catch(() => cached);
       return cached || network;
     })
   );

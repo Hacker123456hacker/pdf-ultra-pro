@@ -1,18 +1,37 @@
 /**
  * main.js — homepage & general site interactivity (search, category
- * filter). No use of eval/innerHTML with dynamic data: all filtering
- * is done by toggling a CSS class based on data attributes.
+ * filter, tool icons). No use of dynamic user data in HTML.
  */
 "use strict";
 
 (function () {
+  function initToolIcons() {
+    const icons = document.querySelectorAll("[data-icon]");
+    if (!icons.length) return;
+
+    icons.forEach((el) => {
+      const name = el.getAttribute("data-icon") || "text";
+      try {
+        if (typeof window.svgIcon === "function") {
+          el.innerHTML = window.svgIcon(name);
+          return;
+        }
+      } catch (_) {
+        // Use the safe fallback below if the shared icon registry is unavailable.
+      }
+
+      // Fallback guarantees that homepage cards never remain blank if the
+      // shared tool registry loads late or is unavailable.
+      el.innerHTML = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 2h9l5 5v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15 2v5h5M8.5 12h7M8.5 15.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+    });
+  }
+
   function initToolSearch() {
     const input = document.getElementById("tool-search-input");
     const cards = document.querySelectorAll("[data-tool-card]");
     if (!input || !cards.length) return;
 
     input.addEventListener("input", () => {
-      // Cap length defensively; this is a client-side filter only.
       const q = input.value.slice(0, 100).trim().toLowerCase();
       cards.forEach((card) => {
         const name = (card.getAttribute("data-tool-name") || "").toLowerCase();
@@ -62,8 +81,6 @@
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const status = document.getElementById("contact-status");
-      // No backend is configured for this static export — this simply
-      // confirms the action locally rather than pretending to send mail.
       if (status) {
         status.textContent =
           "This demo form doesn't send data anywhere yet — wire it up to your own form backend (e.g. Formspree) or a mailto: action before going live.";
@@ -75,13 +92,13 @@
 
   function registerServiceWorker() {
     if (!("serviceWorker" in navigator)) return;
-    // Registered from the root so its scope covers the whole site.
     navigator.serviceWorker.register("sw.js").catch(() => {
       /* offline support is a progressive enhancement — safe to ignore failures */
     });
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    initToolIcons();
     initToolSearch();
     initCategoryPills();
     initCounters();

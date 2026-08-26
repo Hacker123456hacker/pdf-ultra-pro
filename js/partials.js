@@ -66,7 +66,7 @@
               <h4>Edit &amp; Secure</h4><a href="watermark-pdf.html">Watermark</a><a href="sign-pdf.html">Sign PDF</a><a href="crop-pdf.html">Crop PDF</a><a href="page-numbers.html">Page Numbers</a>
             </div>
             <div class="footer-col">
-              <h4>Company</h4><a href="about.html">About</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="report-problem.html">Report a Problem</a><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="disclaimer.html">Disclaimer</a>
+              <h4>Company</h4><a href="about.html">About</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="disclaimer.html">Disclaimer</a>
             </div>
           </div>
           <div class="footer-contact">
@@ -74,7 +74,7 @@
           </div>
           <div class="footer-bottom">
             <span>© ${year} PDF Ultra Pro. All files are processed locally in your browser.</span>
-            <span>Made with care by <strong>Abhishek</strong> · PDF Ultra Pro is built to make PDF work simple, private and accessible.</span>
+            <span class="creator-credit">✦ <strong>Made by Abhishek</strong> · Crafted with care to keep your PDFs private, simple and powerful. ✦</span>
           </div>
         </div>
       </footer>`;

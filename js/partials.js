@@ -4,23 +4,26 @@
 "use strict";
 
 (function () {
+  const SITE_ROOT = "https://pdf-ultra-pro.pages.dev/";
   const NAV_LINKS = [
-    ["index.html", "Home"],
-    ["all-tools.html", "All Tools"],
-    ["blog.html", "Blog"],
-    ["faq.html", "FAQ"],
-    ["about.html", "About"],
-    ["contact.html", "Contact"],
+    [SITE_ROOT, "Home"],
+    [SITE_ROOT + "all-tools.html", "All Tools"],
+    [SITE_ROOT + "blog.html", "Blog"],
+    [SITE_ROOT + "faq.html", "FAQ"],
+    [SITE_ROOT + "about.html", "About"],
+    [SITE_ROOT + "contact.html", "Contact"],
   ];
 
   function currentPath() {
-    return window.location.pathname.split("/").pop() || "index.html";
+    const path = window.location.pathname.replace(/\/+$/, "");
+    return path === "" || path === "/index.html" ? "/" : path;
   }
 
   function headerHTML() {
     const here = currentPath();
     const links = NAV_LINKS.map(([href, label]) => {
-      const current = href.split("/").pop() === here ? ' aria-current="page"' : "";
+      const target = new URL(href).pathname.replace(/\/+$/, "") || "/";
+      const current = target === here ? ' aria-current="page"' : "";
       return `<a href="${href}"${current}>${label}</a>`;
     }).join("");
 
@@ -28,7 +31,7 @@
       <a class="skip-link" href="#main-content">Skip to content</a>
       <header class="site-header">
         <div class="nav">
-          <a class="brand" href="index.html">
+          <a class="brand" href="${SITE_ROOT}">
             <span class="brand-mark">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 2h9l5 5v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.8"/><path d="M15 2v5h5" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 13.5h7M8.5 16.5h4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             </span>
@@ -50,7 +53,7 @@
         <div class="container">
           <div class="footer-grid">
             <div class="footer-col">
-              <a class="brand" href="index.html" style="margin-bottom:14px;">
+              <a class="brand" href="${SITE_ROOT}" style="margin-bottom:14px;">
                 <span class="brand-mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 2h9l5 5v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.8"/></svg></span>
                 PDF Ultra Pro
               </a>
@@ -60,7 +63,7 @@
               <h4>Organize</h4><a href="merge-pdf.html">Merge PDF</a><a href="split-pdf.html">Split PDF</a><a href="reorder-pdf.html">Reorder Pages</a><a href="delete-pages.html">Delete Pages</a>
             </div>
             <div class="footer-col">
-              <h4>Convert</h4><a href="pdf-to-jpg.html">PDF to JPG</a><a href="word-to-pdf.html">Word to PDF</a><a href="ocr-pdf.html">OCR PDF</a><a href="all-tools.html">All Tools</a>
+              <h4>Convert</h4><a href="pdf-to-jpg.html">PDF to JPG</a><a href="word-to-pdf.html">Word to PDF</a><a href="ocr-pdf.html">OCR PDF</a><a href="${SITE_ROOT}all-tools.html">All Tools</a>
             </div>
             <div class="footer-col">
               <h4>Edit &amp; Secure</h4><a href="watermark-pdf.html">Watermark</a><a href="sign-pdf.html">Sign PDF</a><a href="crop-pdf.html">Crop PDF</a><a href="page-numbers.html">Page Numbers</a>

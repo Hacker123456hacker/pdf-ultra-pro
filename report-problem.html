@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Report a Problem — PDF Ultra Pro</title>
-<meta name="description" content="Report a PDF Ultra Pro bug or tool problem directly to Abhishek.">
+<meta name="description" content="Contact PDF Ultra Pro support by email or phone to report a problem.">
 <link rel="canonical" href="https://pdf-ultra-pro.pages.dev/report-problem.html">
 <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.json">
@@ -18,26 +18,19 @@
     <div class="page-hero">
       <span class="eyebrow">Support</span>
       <h1>Report a Problem</h1>
-      <p style="max-width:62ch;margin:0 auto;">Tell us what went wrong. Your report will be sent directly to the PDF Ultra Pro support email.</p>
+      <p style="max-width:62ch;margin:0 auto;">Found something that isn't working correctly? Contact Abhishek directly and include the tool name and a short description of the issue.</p>
     </div>
   </div>
   <section class="section section-tight">
     <div class="container">
-      <div class="glass" style="max-width:620px;margin:0 auto;padding:32px;">
-        <form action="https://formsubmit.co/abhishekv8471@gmail.com" method="POST">
-          <input type="hidden" name="_subject" value="PDF Ultra Pro — Problem Report">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_next" value="https://pdf-ultra-pro.pages.dev/report-problem.html?sent=1">
-          <input type="hidden" name="_replyto" id="problem-replyto">
-          <div class="option-group"><label for="p-name">Your name</label><input type="text" id="p-name" name="name" required maxlength="100" autocomplete="name"></div>
-          <div class="option-group"><label for="p-email">Your email</label><input type="email" id="p-email" name="email" required maxlength="200" autocomplete="email"></div>
-          <div class="option-group"><label for="p-tool">Which tool has the problem?</label><select id="p-tool" name="tool" required><option value="">Select a tool</option><option>Merge PDF</option><option>Split PDF</option><option>Rotate PDF</option><option>Delete Pages</option><option>Extract Pages</option><option>Reorder Pages</option><option>Crop PDF</option><option>Watermark PDF</option><option>Sign PDF</option><option>Compress PDF</option><option>Repair PDF</option><option>PDF to JPG</option><option>JPG/PNG to PDF</option><option>PDF to Text</option><option>Extract Images</option><option>Word to PDF</option><option>Excel to PDF</option><option>PowerPoint to PDF</option><option>OCR PDF</option><option>Preview PDF</option><option>Compare PDFs</option><option>Other</option></select></div>
-          <div class="option-group"><label for="p-type">Problem type</label><select id="p-type" name="problem_type"><option>Tool not working</option><option>Error message</option><option>Wrong output</option><option>Mobile issue</option><option>Suggestion</option><option>Other</option></select></div>
-          <div class="option-group"><label for="p-message">Describe the problem</label><textarea id="p-message" name="message" required maxlength="5000" placeholder="Explain what you did, what happened, and what you expected…"></textarea></div>
-          <p style="font-size:.9em;opacity:.8;">Please do not include confidential documents, passwords, or other sensitive information in this form.</p>
-          <button type="submit" class="btn btn-primary btn-block">Send Problem Report</button>
-        </form>
+      <div class="grid grid-2" style="max-width:760px;margin:0 auto;">
+        <div class="feature-card"><h3>📧 Email — 24/7</h3><p>Send the tool name, what happened, and what you expected. Email support is available anytime.</p><p><a href="mailto:abhishekv8471@gmail.com?subject=PDF%20Ultra%20Pro%20Problem%20Report">abhishekv8471@gmail.com</a></p></div>
+        <div class="feature-card"><h3>📞 Phone</h3><p>For direct support, call every day from <strong>10:00 AM to 4:00 PM (IST)</strong>.</p><p><a href="tel:+919648660720">+91 96486 60720</a></p></div>
+      </div>
+      <div class="glass" style="max-width:760px;margin:28px auto 0;padding:30px;text-align:center;">
+        <h2 style="margin-top:0;">What to include</h2>
+        <p>Please mention the PDF tool you were using, the steps you took, what happened, and what you expected. Do not send passwords or confidential documents.</p>
+        <a href="mailto:abhishekv8471@gmail.com?subject=PDF%20Ultra%20Pro%20Problem%20Report" class="btn btn-primary">Email Support →</a>
       </div>
     </div>
   </section>
@@ -46,6 +39,5 @@
 <script src="js/theme.js"></script>
 <script src="js/partials.js"></script>
 <script src="js/main.js"></script>
-<script>document.getElementById('p-email').addEventListener('input',function(){document.getElementById('problem-replyto').value=this.value;});</script>
 </body>
 </html>

@@ -29,6 +29,7 @@
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_next" value="https://pdf-ultra-pro.pages.dev/report-problem.html?sent=1">
+          <input type="hidden" name="_replyto" id="problem-replyto">
           <div class="option-group"><label for="p-name">Your name</label><input type="text" id="p-name" name="name" required maxlength="100" autocomplete="name"></div>
           <div class="option-group"><label for="p-email">Your email</label><input type="email" id="p-email" name="email" required maxlength="200" autocomplete="email"></div>
           <div class="option-group"><label for="p-tool">Which tool has the problem?</label><select id="p-tool" name="tool" required><option value="">Select a tool</option><option>Merge PDF</option><option>Split PDF</option><option>Rotate PDF</option><option>Delete Pages</option><option>Extract Pages</option><option>Reorder Pages</option><option>Crop PDF</option><option>Watermark PDF</option><option>Sign PDF</option><option>Compress PDF</option><option>Repair PDF</option><option>PDF to JPG</option><option>JPG/PNG to PDF</option><option>PDF to Text</option><option>Extract Images</option><option>Word to PDF</option><option>Excel to PDF</option><option>PowerPoint to PDF</option><option>OCR PDF</option><option>Preview PDF</option><option>Compare PDFs</option><option>Other</option></select></div>
@@ -45,5 +46,6 @@
 <script src="js/theme.js"></script>
 <script src="js/partials.js"></script>
 <script src="js/main.js"></script>
+<script>document.getElementById('p-email').addEventListener('input',function(){document.getElementById('problem-replyto').value=this.value;});</script>
 </body>
 </html>

@@ -5,6 +5,18 @@
 "use strict";
 
 (function () {
+  function loadSharedIcons() {
+    if (typeof window.svgIcon === "function") return Promise.resolve();
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "js/icons.js?v=2";
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => resolve();
+      document.head.appendChild(script);
+    });
+  }
+
   function initToolIcons() {
     const icons = document.querySelectorAll("[data-icon]");
     if (!icons.length) return;
@@ -21,7 +33,7 @@
       }
 
       // Fallback guarantees that homepage cards never remain blank if the
-      // shared tool registry loads late or is unavailable.
+      // shared icon registry fails to load.
       el.innerHTML = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 2h9l5 5v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15 2v5h5M8.5 12h7M8.5 15.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
     });
   }
@@ -97,7 +109,8 @@
     });
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
+    await loadSharedIcons();
     initToolIcons();
     initToolSearch();
     initCategoryPills();

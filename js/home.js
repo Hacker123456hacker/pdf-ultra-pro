@@ -36,31 +36,48 @@
 
   function init() {
     renderIcons();
-    setTimeout(renderIcons, 100);
-    setTimeout(renderIcons, 500);
 
     const input = document.getElementById('tool-search-input');
-    const cards = Array.from(document.querySelectorAll('[data-tool-card]'));
-    const pills = Array.from(document.querySelectorAll('[data-category-pill]'));
+    const cards = Array.from(document.querySelectorAll('.tool-card[data-tool-card]'));
+    const pills = Array.from(document.querySelectorAll('.category-pills [data-category-pill]'));
     let category = 'all';
+
     function filterCards() {
       const q = input ? input.value.trim().toLowerCase() : '';
       cards.forEach(function (card) {
-        const name = (card.getAttribute('data-tool-name') || '').toLowerCase();
-        const cat = card.getAttribute('data-tool-category') || '';
-        card.hidden = !!((q && !name.includes(q)) || (category !== 'all' && cat !== category));
+        const name = (card.getAttribute('data-tool-name') || card.querySelector('h3')?.textContent || '').toLowerCase();
+        const description = (card.querySelector('p')?.textContent || '').toLowerCase();
+        const cat = (card.getAttribute('data-tool-category') || '').toLowerCase();
+        const matchesText = !q || name.includes(q) || description.includes(q);
+        const matchesCategory = category === 'all' || cat === category;
+        card.style.display = matchesText && matchesCategory ? '' : 'none';
       });
     }
-    if (input) input.addEventListener('input', filterCards);
+
+    if (input) {
+      input.addEventListener('input', filterCards);
+      input.addEventListener('keyup', filterCards);
+      input.addEventListener('search', filterCards);
+    }
+
     pills.forEach(function (pill) {
-      pill.addEventListener('click', function () {
-        category = pill.getAttribute('data-category-pill') || 'all';
-        pills.forEach(function (p) { p.classList.toggle('active', p === pill); });
+      pill.addEventListener('click', function (event) {
+        event.preventDefault();
+        category = (pill.getAttribute('data-category-pill') || 'all').toLowerCase();
+        pills.forEach(function (p) { p.classList.remove('active'); });
+        pill.classList.add('active');
         filterCards();
       });
     });
+
+    filterCards();
+    setTimeout(renderIcons, 100);
+    setTimeout(renderIcons, 500);
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
 })();

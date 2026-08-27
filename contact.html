@@ -10,6 +10,24 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#6C4CF0">
 <link rel="stylesheet" href="css/style.css">
+<style>
+  .contact-card-link {
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:6px;
+    padding:10px 16px;
+    border-radius:999px;
+    color:#fff !important;
+    font-weight:800;
+    text-decoration:none;
+    background:linear-gradient(135deg,#6C4CF0,#3EE0E8);
+    box-shadow:0 8px 24px rgba(108,76,240,.28);
+    transition:transform .2s ease,box-shadow .2s ease;
+  }
+  .contact-card-link:hover { transform:translateY(-2px) scale(1.02); box-shadow:0 12px 30px rgba(108,76,240,.36); }
+  .contact-card-link.phone { background:linear-gradient(135deg,#3EE0E8,#6C4CF0); }
+</style>
 </head>
 <body>
 <div id="site-header"></div>
@@ -24,8 +42,8 @@
   <section class="section section-tight">
     <div class="container">
       <div class="grid grid-2" style="max-width:760px;margin:0 auto;">
-        <div class="feature-card"><h3>📧 Email — 24/7</h3><p>For questions, feedback and support. You can email us anytime.</p><p><a href="mailto:abhishekv8471@gmail.com">abhishekv8471@gmail.com</a></p></div>
-        <div class="feature-card"><h3>📞 Phone</h3><p>Phone support is available every day from <strong>10:00 AM to 4:00 PM (IST)</strong>.</p><p><a href="tel:+919648660720">+91 96486 60720</a></p></div>
+        <div class="feature-card"><h3>📧 Email — 24/7</h3><p>For questions, feedback and support. You can email us anytime.</p><p><a class="contact-card-link" href="mailto:abhishekv8471@gmail.com">✉️ abhishekv8471@gmail.com</a></p></div>
+        <div class="feature-card"><h3>📞 Phone</h3><p>Phone support is available every day from <strong>10:00 AM to 4:00 PM (IST)</strong>.</p><p><a class="contact-card-link phone" href="tel:+919648660720">📞 +91 96486 60720</a></p></div>
       </div>
       <div class="glass" style="max-width:760px;margin:28px auto 0;padding:30px;text-align:center;">
         <h2 style="margin-top:0;">Need to report a problem?</h2>

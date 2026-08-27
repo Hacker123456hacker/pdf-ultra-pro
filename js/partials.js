@@ -72,12 +72,14 @@
               <h4>Company</h4><a href="about.html">About</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="disclaimer.html">Disclaimer</a>
             </div>
           </div>
-          <div class="footer-contact">
-            <strong>Need help?</strong> <a href="tel:+919648660720">+91 96486 60720</a> · <a href="mailto:abhishekv8471@gmail.com">abhishekv8471@gmail.com</a>
+          <div class="footer-contact" style="margin:24px 0 18px;padding:18px 22px;border-radius:18px;background:linear-gradient(135deg,rgba(108,76,240,.12),rgba(62,224,232,.12));border:1px solid rgba(108,76,240,.25);box-shadow:0 8px 28px rgba(108,76,240,.10);">
+            <strong style="font-size:1rem;">Need help?</strong>
+            <a href="tel:+919648660720" style="display:inline-block;margin:5px 8px;padding:7px 13px;border-radius:999px;background:linear-gradient(135deg,#6C4CF0,#3EE0E8);color:#fff;font-weight:800;box-shadow:0 5px 16px rgba(108,76,240,.30);">📞 +91 96486 60720</a>
+            <a href="mailto:abhishekv8471@gmail.com" style="display:inline-block;margin:5px 8px;padding:7px 13px;border-radius:999px;background:linear-gradient(135deg,#3EE0E8,#6C4CF0);color:#fff;font-weight:800;box-shadow:0 5px 16px rgba(62,224,232,.25);">✉️ abhishekv8471@gmail.com</a>
           </div>
           <div class="footer-bottom">
             <span>© ${year} PDF Ultra Pro. All files are processed locally in your browser.</span>
-            <span class="creator-credit">✦ <strong>Made by Abhishek</strong> · Crafted with care to keep your PDFs private, simple and powerful. ✦</span>
+            <span class="creator-credit" style="font-weight:800;background:linear-gradient(90deg,#6C4CF0,#3EE0E8,#6C4CF0);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:creatorGradient 4s linear infinite;text-shadow:0 4px 18px rgba(108,76,240,.18);">✦ Made by Abhishek · Crafted with care to keep your PDFs private, simple and powerful. ✦</span>
           </div>
         </div>
       </footer>`;

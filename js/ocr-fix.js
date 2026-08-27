@@ -11,12 +11,12 @@
   const originalCreateWorker = window.Tesseract && window.Tesseract.createWorker;
   if (!originalCreateWorker || !window.Tesseract) return;
 
-  window.PDFUltraProCreateOCRWorker = function (lang, logger) {
-    return originalCreateWorker.call(window.Tesseract, lang, 1, {
+  window.Tesseract.createWorker = function (lang, oem, options, config) {
+    const safeOptions = Object.assign({}, options || {}, {
       workerPath: OCR_WORKER_PATH,
       corePath: OCR_CORE_PATH,
       langPath: OCR_LANG_PATH,
-      logger: logger || undefined,
     });
+    return originalCreateWorker.call(window.Tesseract, lang, oem, safeOptions, config);
   };
 })();

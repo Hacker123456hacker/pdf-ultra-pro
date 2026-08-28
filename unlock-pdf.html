@@ -1,1 +1,45 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Unlock PDF — PDF Ultra Pro</title><meta name="description" content="Remove protection from a PDF you own when you know its password, directly in your browser."><link rel="icon" href="icons/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="css/style.css"></head><body><div id="site-header"></div><main class="tool-page"><div class="container"><nav class="breadcrumb"><a href="index.html">Home</a><span>/</span><a href="all-tools.html">All Tools</a><span>/</span><span>Unlock PDF</span></nav><header class="tool-header"><div class="tool-icon">🔓</div><h1>Unlock PDF</h1><p>Remove protection from a PDF you own when you already know its password.</p></header><div class="tool-app"><div class="glass" style="padding:28px"><div class="alert alert-info">🔓 Enter the correct PDF password. Your file stays on this device.</div><div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Choose protected PDF"><input id="pdfFile" type="file" accept="application/pdf,.pdf" hidden><div style="font-size:36px;line-height:1">↑</div><p style="margin:8px 0;font-weight:600">Drag & drop your PDF here, or click to browse</p><p class="dz-hint">PDF · up to 100MB</p></div><div id="fileList" class="file-list"></div><div id="options" style="display:none"><label class="option-group"><span>PDF password</span><input id="password" type="password" autocomplete="current-password" placeholder="Enter the existing password" class="text-input"></label><button id="unlockBtn" type="button" class="btn btn-primary">🔓 Unlock & Download PDF</button></div><div id="status" class="alert" style="display:none;margin-top:18px"></div></div></div></div></main><div id="site-footer"></div><script src="js/theme.js"></script><script src="js/partials.js"></script><script type="module">import{unlockPdf}from'./js/pdf-security.js';const $=id=>document.getElementById(id);let file=null;function msg(t,ok=false){const s=$("status");s.style.display=t?'block':'none';s.className='alert '+(ok?'alert-success':'alert-error');s.textContent=t}function show(){const l=$("fileList");l.replaceChildren();if(!file){$("options").style.display='none';return}const r=document.createElement('div');r.className='file-row';const m=document.createElement('div');m.className='file-meta';const n=document.createElement('div');n.className='file-name';n.textContent=file.name;const z=document.createElement('div');z.className='file-size';z.textContent=(file.size/1048576).toFixed(2)+' MB';m.append(n,z);const x=document.createElement('button');x.type='button';x.className='file-remove';x.textContent='×';x.onclick=()=>{file=null;show()};r.append(m,x);l.append(r);$("options").style.display='block'}function setFile(f){if(!f)return;if(f.type!=='application/pdf'&&!/\.pdf$/i.test(f.name))return msg('Please choose a PDF file.');if(f.size>100*1024*1024)return msg('PDF is larger than 100MB.');file=f;msg('');show()}const dz=$("dropzone"),input=$("pdfFile");dz.onclick=()=>input.click();input.onclick=e=>e.stopPropagation();input.onchange=e=>setFile(e.target.files?.[0]);dz.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();input.click()}};['dragenter','dragover'].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.add('dragover')}));['dragleave','drop'].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.remove('dragover')}));dz.addEventListener('drop',e=>setFile(e.dataTransfer.files?.[0]));$("unlockBtn").onclick=async()=>{const p=$("password").value;if(!file)return msg('Please upload a PDF first.');if(!p)return msg('Please enter the PDF password.');const b=$("unlockBtn");b.disabled=true;b.textContent='Loading engine…';try{msg('Loading PDF security engine…',true);const out=await unlockPdf(file,p);const u=URL.createObjectURL(new Blob([out],{type:'application/pdf'}));const a=document.createElement('a');a.href=u;a.download=file.name.replace(/\.pdf$/i,'')+'-unlocked.pdf';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);msg('PDF unlocked successfully.',true)}catch(e){console.error(e);msg('Could not unlock this PDF. Check the password and make sure the PDF is not damaged.')}finally{b.disabled=false;b.textContent='🔓 Unlock & Download PDF'}};</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Unlock PDF — PDF Ultra Pro</title>
+<meta name="description" content="Remove protection from a PDF you own when you know its password, directly in your browser.">
+<link rel="canonical" href="https://pdf-ultra-pro.pages.dev/unlock-pdf.html">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main class="tool-page">
+<div class="container">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><a href="all-tools.html">All Tools</a><span>/</span><span>Unlock PDF</span></nav>
+<header class="tool-header"><div class="tool-icon">🔓</div><h1>Unlock PDF</h1><p>Remove protection from a PDF you own when you already know its password.</p></header>
+<div class="tool-app"><div class="glass" style="padding:28px">
+<div class="alert alert-info">🔓 Enter the correct PDF password. Your file stays on this device.</div>
+<label class="dropzone" id="dropzone" tabindex="0" for="pdfFile" aria-label="Choose protected PDF">
+<input id="pdfFile" type="file" accept="application/pdf,.pdf" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none">
+<div style="font-size:36px;line-height:1">↑</div><p style="margin:8px 0;font-weight:600">Tap here to choose your PDF</p><p class="dz-hint">PDF · up to 100MB</p>
+</label>
+<div id="fileList" class="file-list"></div>
+<div id="options" style="display:none"><label class="option-group"><span>PDF password</span><input id="password" type="password" autocomplete="current-password" placeholder="Enter the existing password" class="text-input"></label><button id="unlockBtn" type="button" class="btn btn-primary">🔓 Unlock &amp; Download PDF</button></div>
+<div id="status" class="alert" style="display:none;margin-top:18px"></div>
+</div></div></div></main>
+<div id="site-footer"></div>
+<script src="js/theme.js"></script><script src="js/partials.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  let file=null;
+  const input=document.getElementById('pdfFile'), dz=document.getElementById('dropzone'), list=document.getElementById('fileList'), options=document.getElementById('options'), status=document.getElementById('status'), button=document.getElementById('unlockBtn');
+  function msg(text,ok){status.style.display=text?'block':'none';status.className='alert '+(ok?'alert-success':'alert-error');status.textContent=text||'';}
+  function render(){list.replaceChildren();options.style.display=file?'block':'none';if(!file)return;const row=document.createElement('div'),meta=document.createElement('div'),name=document.createElement('div'),size=document.createElement('div'),remove=document.createElement('button');row.className='file-row';meta.className='file-meta';name.className='file-name';size.className='file-size';remove.className='file-remove';remove.type='button';name.textContent=file.name;size.textContent=(file.size/1048576).toFixed(2)+' MB';remove.textContent='×';remove.onclick=function(){file=null;input.value='';render();};meta.append(name,size);row.append(meta,remove);list.append(row);}
+  function setFile(f){if(!f)return;if(f.type!=='application/pdf'&&!/\.pdf$/i.test(f.name))return msg('Please choose a PDF file.');if(f.size>100*1024*1024)return msg('PDF is larger than 100MB.');file=f;msg('');render();}
+  input.addEventListener('change',function(e){setFile(e.target.files&&e.target.files[0]);});
+  dz.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();input.click();}});
+  dz.addEventListener('dragover',function(e){e.preventDefault();dz.classList.add('dragover');});
+  dz.addEventListener('dragleave',function(){dz.classList.remove('dragover');});
+  dz.addEventListener('drop',function(e){e.preventDefault();dz.classList.remove('dragover');setFile(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0]);});
+  button.addEventListener('click',async function(){const p=document.getElementById('password').value;if(!file)return msg('Please choose a PDF first.');if(!p)return msg('Please enter the PDF password.');button.disabled=true;button.textContent='Loading security engine…';try{msg('Unlocking PDF…',true);const mod=await import('./js/pdf-security.js');const out=await mod.unlockPdf(file,p);const url=URL.createObjectURL(new Blob([out],{type:'application/pdf'}));const a=document.createElement('a');a.href=url;a.download=file.name.replace(/\.pdf$/i,'')+'-unlocked.pdf';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},3000);msg('PDF unlocked successfully.',true);}catch(e){console.error(e);msg('Could not unlock this PDF: '+(e&&e.message?e.message:'Check the password and PDF.'));}finally{button.disabled=false;button.textContent='🔓 Unlock & Download PDF';}});
+});
+</script>
+</body></html>

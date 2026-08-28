@@ -27,6 +27,21 @@
     unlock: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 11V8a4 4 0 0 1 7.4-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
   };
 
+  function addTextToPdfCard() {
+    const grid = document.querySelector('#tools .grid.grid-4');
+    if (!grid || grid.querySelector('[data-tool-name="Text to PDF"]')) return;
+    const card = document.createElement('a');
+    card.className = 'tool-card';
+    card.setAttribute('data-tool-card', '');
+    card.setAttribute('data-tool-name', 'Text to PDF');
+    card.setAttribute('data-tool-category', 'convert');
+    card.href = 'text-to-pdf.html';
+    card.innerHTML = '<div class="card-icon" data-icon="text"></div><h3>Text to PDF</h3><p>Create a PDF from text and place photos anywhere on the page.</p>';
+    const firstConvert = grid.querySelector('[data-tool-category="convert"]');
+    if (firstConvert) grid.insertBefore(card, firstConvert);
+    else grid.appendChild(card);
+  }
+
   function renderIcons() {
     document.querySelectorAll('.card-icon[data-icon]').forEach(function (el) {
       const name = el.getAttribute('data-icon');
@@ -35,6 +50,7 @@
   }
 
   function init() {
+    addTextToPdfCard();
     renderIcons();
 
     const input = document.getElementById('tool-search-input');

@@ -1,6 +1,5 @@
 /* PDF Ultra Pro — homepage */
 "use strict";
-
 (function () {
   const ICONS = {
     merge: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3v9a5 5 0 0 0 10 0V3M4 3h6M14 3h6M12 21v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
@@ -14,8 +13,8 @@
     pagenum: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 2h9l5 5v15H6V2Z" stroke="currentColor" stroke-width="1.8"/><text x="12" y="17" font-size="7" text-anchor="middle" fill="currentColor">12</text></svg>',
     metadata: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 2h9l5 5v15H6V2Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="14" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v-1M12 18v-1M15 14h1M8 14h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
     sign: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17s2-1 4-1 3 2 5 2 3-2 5-2 4 1 4 1M6 13l9-9 3 3-9 9-4 1 1-4Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    font: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 20 11 4h2l5 16M8 14h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    compress: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9l4-4 4 4M4 15l4 4 4-4M8 5v14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="14" y="4" width="6" height="16" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg>',
+    font: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 20 11 4h2l5 16M8 14h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+    compress: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9l4-4 4 4M4 15l4 4 4-4M8 5v14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="14" y="4" width="6" height="16" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg>',
     wrench: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 1 5.4-5.4l-3 3-2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
     image: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="10" r="1.6" stroke="currentColor" stroke-width="1.6"/><path d="M4 17l5-5 4 4 3-3 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     text: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 2h9l5 5v15H6V2Z" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 12h7M8.5 15.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
@@ -26,7 +25,16 @@
     lock: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8"/></svg>',
     unlock: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 11V8a4 4 0 0 1 7.4-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
   };
-
+  function moveProtectToSixth() {
+    const grid = document.querySelector('#tools .grid.grid-4');
+    if (!grid) return;
+    const cards = Array.from(grid.querySelectorAll(':scope > .tool-card[data-tool-card]'));
+    const protect = cards.find(c => (c.getAttribute('data-tool-name') || '').toLowerCase() === 'protect pdf');
+    if (!protect) return;
+    const normalCards = cards.filter(c => c !== protect);
+    const anchor = normalCards[5];
+    if (anchor) grid.insertBefore(protect, anchor.nextSibling);
+  }
   function addTextToPdfCard() {
     const grid = document.querySelector('#tools .grid.grid-4');
     if (!grid || grid.querySelector('[data-tool-name="Text to PDF"]')) return;
@@ -38,26 +46,22 @@
     card.href = 'text-to-pdf.html';
     card.innerHTML = '<div class="card-icon" data-icon="text"></div><h3>Text to PDF</h3><p>Create a PDF from text and place photos anywhere on the page.</p>';
     const firstConvert = grid.querySelector('[data-tool-category="convert"]');
-    if (firstConvert) grid.insertBefore(card, firstConvert);
-    else grid.appendChild(card);
+    if (firstConvert) grid.insertBefore(card, firstConvert); else grid.appendChild(card);
   }
-
   function renderIcons() {
     document.querySelectorAll('.card-icon[data-icon]').forEach(function (el) {
       const name = el.getAttribute('data-icon');
       if (ICONS[name]) el.innerHTML = ICONS[name];
     });
   }
-
   function init() {
     addTextToPdfCard();
+    moveProtectToSixth();
     renderIcons();
-
     const input = document.getElementById('tool-search-input');
     const cards = Array.from(document.querySelectorAll('.tool-card[data-tool-card]'));
     const pills = Array.from(document.querySelectorAll('.category-pills [data-category-pill]'));
     let category = 'all';
-
     function filterCards() {
       const q = input ? input.value.trim().toLowerCase() : '';
       cards.forEach(function (card) {
@@ -69,13 +73,7 @@
         card.style.display = matchesText && matchesCategory ? '' : 'none';
       });
     }
-
-    if (input) {
-      input.addEventListener('input', filterCards);
-      input.addEventListener('keyup', filterCards);
-      input.addEventListener('search', filterCards);
-    }
-
+    if (input) { input.addEventListener('input', filterCards); input.addEventListener('keyup', filterCards); input.addEventListener('search', filterCards); }
     pills.forEach(function (pill) {
       pill.addEventListener('click', function (event) {
         event.preventDefault();
@@ -85,15 +83,9 @@
         filterCards();
       });
     });
-
     filterCards();
     setTimeout(renderIcons, 100);
     setTimeout(renderIcons, 500);
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init, { once: true });
-  } else {
-    init();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true }); else init();
 })();

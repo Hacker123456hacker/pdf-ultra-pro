@@ -1,0 +1,10 @@
+{
+  "language": "hi-IN",
+  "voice": "hi-IN-SwaraNeural",
+  "privacy": "private",
+  "duration_seconds": 60,
+  "width": 1080,
+  "height": 1920,
+  "topic": "",
+  "output_dir": "output"
+}

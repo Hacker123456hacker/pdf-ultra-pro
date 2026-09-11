@@ -1,8 +1,0 @@
-output/
-*.mp4
-*.mp3
-*.wav
-.env
-*.json
-!config.example.json
-client_secret*.json

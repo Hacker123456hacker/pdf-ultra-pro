@@ -1240,7 +1240,7 @@ registerTool({
 
 registerTool({
   id: "images-to-pdf",
-  title: "JPG/PNG to PDF",
+  title: "Images to PDF",
   desc: "Combine JPG, PNG or WebP images into a single PDF document.",
   category: "convert",
   icon: "image",

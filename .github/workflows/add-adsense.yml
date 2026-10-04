@@ -1,0 +1,49 @@
+name: Add AdSense script
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  add-adsense:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add AdSense script to HTML pages
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          script = '''<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8279679003849482"
+               crossorigin="anonymous"></script>'''
+
+          for path in Path('.').rglob('*.html'):
+              if '.git' in path.parts:
+                  continue
+              text = path.read_text(encoding='utf-8')
+              if 'ca-pub-8279679003849482' in text:
+                  continue
+              marker = '<head>'
+              if marker in text:
+                  text = text.replace(marker, marker + '\n' + script, 1)
+                  path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add '*.html'
+          if git diff --cached --quiet; then
+            echo "No HTML files needed updating."
+          else
+            git commit -m "Add Google AdSense script to HTML pages"
+            git push
+          fi

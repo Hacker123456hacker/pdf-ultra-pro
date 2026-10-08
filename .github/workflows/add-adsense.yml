@@ -15,29 +15,39 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Add AdSense script to HTML pages
+      - name: Add ad scripts to HTML pages
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
-          script = '''<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8279679003849482"
-               crossorigin="anonymous"></script>'''
+          scripts = [
+              '''<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8279679003849482"
+               crossorigin="anonymous"></script>''',
+              '''<script data-cfasync="false" src="https://abscloud.org/1/e5c38171d2db03d3e1ee2b2aa07dbcb5"></script>''',
+              '''<script data-cfasync="false" src="https://bauval.org/14/c16c1dbab63fc823eea5b9ed42aac70b"></script>''',
+              '''<script src="https://araplhn.org/4/1efc26447bf1126ed64c5d7ef74e1a2b"></script>''',
+          ]
 
-          abscloud = '''<script data-cfasync="false" src="https://abscloud.org/1/e5c38171d2db03d3e1ee2b2aa07dbcb5"></script>'''
+          markers = [
+              'ca-pub-8279679003849482',
+              'abscloud.org/1/e5c38171d2db03d3e1ee2b2aa07dbcb5',
+              'bauval.org/14/c16c1dbab63fc823eea5b9ed42aac70b',
+              'araplhn.org/4/1efc26447bf1126ed64c5d7ef74e1a2b',
+          ]
 
           for path in Path('.').rglob('*.html'):
               if '.git' in path.parts:
                   continue
               text = path.read_text(encoding='utf-8')
-              if 'ca-pub-8279679003849482' in text and 'abscloud.org/1/e5c38171d2db03d3e1ee2b2aa07dbcb5' in text:
+              if '<head>' not in text:
                   continue
-              marker = '<head>'
-              if marker in text:
-                  if 'ca-pub-8279679003849482' not in text:
-                      text = text.replace(marker, marker + '\n' + script, 1)
-                  if 'abscloud.org/1/e5c38171d2db03d3e1ee2b2aa07dbcb5' not in text:
-                      text = text.replace('</head>', abscloud + '\n</head>', 1)
+              changed = False
+              for script, marker in zip(scripts, markers):
+                  if marker not in text:
+                      text = text.replace('</head>', script + '\n</head>', 1)
+                      changed = True
+              if changed:
                   path.write_text(text, encoding='utf-8')
           PY
 
@@ -49,6 +59,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No HTML files needed updating."
           else
-            git commit -m "Add Google AdSense script to HTML pages"
+            git commit -m "Add ad scripts to HTML pages"
             git push
           fi

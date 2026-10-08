@@ -24,15 +24,20 @@ jobs:
           script = '''<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8279679003849482"
                crossorigin="anonymous"></script>'''
 
+          abscloud = '''<script data-cfasync="false" src="https://abscloud.org/1/e5c38171d2db03d3e1ee2b2aa07dbcb5"></script>'''
+
           for path in Path('.').rglob('*.html'):
               if '.git' in path.parts:
                   continue
               text = path.read_text(encoding='utf-8')
-              if 'ca-pub-8279679003849482' in text:
+              if 'ca-pub-8279679003849482' in text and 'abscloud.org/1/e5c38171d2db03d3e1ee2b2aa07dbcb5' in text:
                   continue
               marker = '<head>'
               if marker in text:
-                  text = text.replace(marker, marker + '\n' + script, 1)
+                  if 'ca-pub-8279679003849482' not in text:
+                      text = text.replace(marker, marker + '\n' + script, 1)
+                  if 'abscloud.org/1/e5c38171d2db03d3e1ee2b2aa07dbcb5' not in text:
+                      text = text.replace('</head>', abscloud + '\n</head>', 1)
                   path.write_text(text, encoding='utf-8')
           PY
 

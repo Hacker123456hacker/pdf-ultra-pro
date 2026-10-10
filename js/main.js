@@ -102,6 +102,15 @@
     });
   }
 
+  function optimizeImages() {
+    // Keep future content images responsive and decode them off the main path.
+    const images = document.querySelectorAll("img");
+    images.forEach((img, index) => {
+      if (index > 0 && !img.hasAttribute("loading")) img.loading = "lazy";
+      if (!img.hasAttribute("decoding")) img.decoding = "async";
+    });
+  }
+
   function registerServiceWorker() {
     if (!("serviceWorker" in navigator)) return;
     navigator.serviceWorker.register("sw.js").catch(() => {
@@ -116,6 +125,7 @@
     initCategoryPills();
     initCounters();
     initContactForm();
+    optimizeImages();
     registerServiceWorker();
   });
 })();

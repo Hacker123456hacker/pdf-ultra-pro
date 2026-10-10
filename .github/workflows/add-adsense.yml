@@ -24,14 +24,12 @@ jobs:
           scripts = [
               '''<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8279679003849482"
                crossorigin="anonymous"></script>''',
-              '''<script data-cfasync="false" src="https://abscloud.org/1/e5c38171d2db03d3e1ee2b2aa07dbcb5"></script>''',
               '''<script data-cfasync="false" src="https://bauval.org/14/c16c1dbab63fc823eea5b9ed42aac70b"></script>''',
               '''<script src="https://araplhn.org/4/1efc26447bf1126ed64c5d7ef74e1a2b"></script>''',
           ]
 
           markers = [
               'ca-pub-8279679003849482',
-              'abscloud.org/1/e5c38171d2db03d3e1ee2b2aa07dbcb5',
               'bauval.org/14/c16c1dbab63fc823eea5b9ed42aac70b',
               'araplhn.org/4/1efc26447bf1126ed64c5d7ef74e1a2b',
           ]
@@ -51,6 +49,23 @@ jobs:
                   path.write_text(text, encoding='utf-8')
           PY
 
+      - name: Remove AbsCloud script from HTML pages
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          pattern = re.compile(r'<script\b[^>]*src=["\']https://abscloud\.org/1/e5c38171d2db03d3e1ee2b2aa07dbcb5["\'][^>]*>\s*</script>\s*', re.I)
+          for path in Path('.').rglob('*.html'):
+              if '.git' in path.parts:
+                  continue
+              text = path.read_text(encoding='utf-8')
+              updated = pattern.sub('', text)
+              if updated != text:
+                  path.write_text(updated, encoding='utf-8')
+          PY
+
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
@@ -59,6 +74,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No HTML files needed updating."
           else
-            git commit -m "Add ad scripts to HTML pages"
+            git commit -m "Update ad scripts and remove AbsCloud"
             git push
           fi

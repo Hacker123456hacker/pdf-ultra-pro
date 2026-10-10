@@ -39,7 +39,6 @@
     "ocr-pdf": ["OCR PDF Online — Make Scanned PDFs Searchable Privately | PDF Ultra Pro", "Run OCR on scanned PDF documents directly in your browser. Make supported scans searchable without uploading files.", "OCR PDF", "Recognize text in scanned PDF pages using browser-based OCR."],
     "preview-pdf": ["Preview PDF Online — Private Browser PDF Viewer | PDF Ultra Pro", "Preview PDF documents page by page directly in your browser without uploading your files.", "Preview PDF", "View PDF pages and inspect a document directly in your browser."],
     "compare-pdf": ["Compare PDF Files Online — Private Browser PDF Comparison | PDF Ultra Pro", "Compare two PDF documents directly in your browser and identify supported text differences without uploading them.", "Compare PDFs", "Compare two versions of a PDF to identify changes."],
-    "unlock-pdf": ["Unlock PDF Online — Browser PDF Security Information | PDF Ultra Pro", "Learn why password removal is not currently offered by this browser-only PDF tool.", "Unlock PDF", "Understand the current limitations of client-side PDF password removal."]
   };
 
   function currentPath() {

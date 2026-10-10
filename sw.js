@@ -5,7 +5,7 @@
  */
 "use strict";
 
-const CACHE_NAME = "pup-shell-v2";
+const CACHE_NAME = "pup-shell-v3";
 const CORE_ASSETS = [
   "index.html",
   "all-tools.html",
@@ -13,8 +13,6 @@ const CORE_ASSETS = [
   "js/theme.js",
   "js/partials.js",
   "js/main.js",
-  "js/pdf-engine.js",
-  "js/tools.js",
   "icons/favicon.svg",
   "manifest.json",
 ];

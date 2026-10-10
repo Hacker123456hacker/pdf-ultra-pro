@@ -121,9 +121,17 @@ const PDFEngine = (() => {
   }
 
   function downloadBlob(blob, filename) {
-    // saveAs (FileSaver.js) triggers a normal client-side download —
-    // no data is transmitted anywhere.
-    saveAs(blob, sanitizeFilename(filename));
+    // Native download avoids loading FileSaver.js on every tool page.
+    const safeName = sanitizeFilename(filename);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = safeName;
+    link.hidden = true;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   function sanitizeFilename(name) {

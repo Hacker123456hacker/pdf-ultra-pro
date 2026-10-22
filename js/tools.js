@@ -1182,11 +1182,17 @@ registerTool({
     report(85, "Saving…");
     const outBytes = await outDoc.save();
     const newSize = outBytes.byteLength;
-    const pct = originalSize > 0 ? Math.max(0, Math.round((1 - newSize / originalSize) * 100)) : 0;
+    const changePct = originalSize > 0 ? Math.round((1 - newSize / originalSize) * 100) : 0;
+    let sizeMessage;
+    if (changePct > 0) {
+      sizeMessage = `Reduced file size from ${PDFEngine.formatBytes(originalSize)} to ${PDFEngine.formatBytes(newSize)} (about ${changePct}% smaller).`;
+    } else if (changePct < 0) {
+      sizeMessage = `The output is ${Math.abs(changePct)}% larger than the original (${PDFEngine.formatBytes(originalSize)} to ${PDFEngine.formatBytes(newSize)}). Try stronger compression or another tool.`;
+    } else {
+      sizeMessage = `Output size is approximately unchanged (${PDFEngine.formatBytes(originalSize)} to ${PDFEngine.formatBytes(newSize)}).`;
+    }
     return {
-      message: `File size reduced from ${PDFEngine.formatBytes(originalSize)} to ${PDFEngine.formatBytes(newSize)}${
-        pct > 0 ? ` (about ${pct}% smaller)` : ""
-      }.`,
+      message: sizeMessage,
       downloads: [{ blob: new Blob([outBytes], { type: "application/pdf" }), filename: renameFile(ws.files[0].name, "compressed") }],
     };
   },

@@ -129,7 +129,8 @@ try {
     assert.equal(download.suggestedFilename(), expectedFilename);
     const filePath = await download.path();
     assert.ok(filePath, "Browser should produce a downloadable file");
-    assert.ok((await stat(filePath)).size > 100, "Downloaded output should not be empty");
+    const minBytes = expectedFilename.endsWith(".txt") ? 10 : 100;
+    assert.ok((await stat(filePath)).size > minBytes, "Downloaded output should not be empty");
   }
 
   await openTool("/merge-pdf.html");

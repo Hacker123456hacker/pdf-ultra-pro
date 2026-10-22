@@ -2,8 +2,9 @@
  * pdf-engine.js
  * Shared, security-conscious helpers used by every tool page.
  *
- * All processing happens locally via pdf-lib / pdf.js / jsPDF. No file
- * is ever sent to a server — everything here runs in the browser.
+ * Supported processing uses pdf-lib / pdf.js / jsPDF in the browser.
+ * This static site has no document-upload backend; external site resources
+ * and advertising can still make normal network requests.
  */
 "use strict";
 

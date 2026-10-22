@@ -2240,9 +2240,6 @@ registerTool({
         { value: "fra", label: "French" },
         { value: "deu", label: "German" },
         { value: "por", label: "Portuguese" },
-        { value: "hin", label: "Hindi" },
-        { value: "ara", label: "Arabic" },
-        { value: "chi_sim", label: "Chinese (Simplified)" },
       ],
     },
   ],
@@ -2250,7 +2247,7 @@ registerTool({
     const info = document.createElement("div");
     info.className = "alert alert-info";
     info.textContent =
-      "Runs entirely in your browser using an on-device OCR engine — the first run downloads a small language model. This can take a while for long documents; keep this tab open until it finishes. Accuracy depends heavily on scan quality.";
+      "Runs in your browser using an on-device OCR engine; the first run downloads a language model. Selectable OCR text currently supports Latin-script languages only (English, Spanish, French, German and Portuguese). Non-Latin scripts may be visible in the page image but will not be searchable in this version. Accuracy depends on scan quality.";
     ws.dynamicEl.appendChild(info);
     ws.renderOptions(ws.dynamicEl);
   },

@@ -122,7 +122,10 @@ try {
     const download = await downloadPromise;
     await page.locator(".result-panel").waitFor({ timeout: 60000 });
     const panelText = await page.locator(".result-panel").innerText();
-    assert.ok(panelText.includes(expectedMessage), `Expected result message "${expectedMessage}", got: ${panelText}`);
+    const messageMatches = typeof expectedMessage === "function"
+      ? expectedMessage(panelText)
+      : panelText.includes(expectedMessage);
+    assert.ok(messageMatches, `Unexpected result message: ${panelText}`);
     assert.equal(download.suggestedFilename(), expectedFilename);
     const filePath = await download.path();
     assert.ok(filePath, "Browser should produce a downloadable file");
@@ -145,12 +148,11 @@ try {
 
   await openTool("/compress-pdf.html");
   await uploadPdfFiles([{ name: "compression-sample.pdf", base64: twoPage }]);
-  await assertDownloadAfter("Compress & Download", "Output", "compression-sample-compressed.pdf").catch(async error => {
-    // Successful compression can report smaller, larger, or unchanged output.
-    if (!String(error.message).includes("Expected result message")) throw error;
-    const panel = await page.locator(".result-panel").innerText().catch(() => "");
-    if (!/file size|output size|larger than the original|reduced file size/i.test(panel)) throw error;
-  });
+  await assertDownloadAfter(
+    "Compress & Download",
+    panelText => /reduced file size|output size is approximately unchanged|larger than the original/i.test(panelText),
+    "compression-sample-compressed.pdf"
+  );
   console.log("Compress PDF: PDF.js rendered pages and a non-empty compressed PDF downloaded.");
 
   await page.goto(base + "/text-to-pdf.html", { waitUntil: "domcontentloaded" });

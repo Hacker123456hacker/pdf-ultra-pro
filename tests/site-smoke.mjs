@@ -155,6 +155,16 @@ try {
   );
   console.log("Compress PDF: PDF.js rendered pages and a non-empty compressed PDF downloaded.");
 
+  await openTool("/pdf-to-text.html");
+  await uploadPdfFiles([{ name: "text-sample.pdf", base64: onePage }]);
+  await assertDownloadAfter("Extract Text & Download", "Extracted text from 1 page.", "text-sample-text.txt");
+  console.log("PDF to Text: text extracted from a real sample PDF and a non-empty TXT downloaded.");
+
+  await openTool("/pdf-to-jpg.html");
+  await uploadPdfFiles([{ name: "image-sample.pdf", base64: onePage }]);
+  await assertDownloadAfter("Convert & Download", "Converted 1 page to JPG.", "image-sample-page-1.jpg");
+  console.log("PDF to JPG: PDF.js rendered a page and a non-empty JPG downloaded.");
+
   await page.goto(base + "/text-to-pdf.html", { waitUntil: "domcontentloaded" });
   await page.locator("#ttp-text").waitFor({ timeout: 20000 });
   await page.locator("#ttp-text").fill("PDF Ultra Pro browser smoke test");

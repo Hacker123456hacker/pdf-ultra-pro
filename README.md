@@ -16,7 +16,7 @@ A free, production-ready PDF toolkit that runs **entirely in the browser** — n
 
 **Word to PDF** (mammoth.js + jsPDF/html2canvas), **Excel to PDF** (SheetJS), and **PowerPoint to PDF** (JSZip-based text extraction) work but are honest about fidelity: they reproduce content, not pixel-perfect original layout — each tool's page states this plainly before you convert. **OCR PDF** runs a real on-device OCR engine (Tesseract.js, 8 languages) and adds an invisible, selectable text layer over the original scanned image. **Extract Fonts** is best-effort — it only recovers standard embedded TrueType/OpenType/Type1 font files.
 
-**Protect PDF** and **Unlock PDF** are intentionally *not* implemented as working tools. Real PDF encryption/decryption needs a properly vetted crypto implementation; the client-side library this project uses (pdf-lib) doesn't support it, and hand-rolling encryption code risks producing a file that looks protected but isn't — worse than no protection at all. Both have dedicated pages (`protect-pdf.html`, `unlock-pdf.html`) explaining this and linking to real alternatives (Adobe Acrobat, LibreOffice, qpdf) rather than a fake "coming soon" placeholder. See `faq.html` for more.
+**Protect PDF** and **Unlock PDF** are not implemented as working tools and are not included in the current published tool list. The client-side library used by this project does not provide the required encryption/decryption support. Do not describe these features as available until a vetted implementation and dedicated user-facing pages have been added. See `faq.html` for the current limitations.
 
 ## Folder structure
 
@@ -60,7 +60,11 @@ python3 -m http.server 8080
 # visit http://localhost:8080/index.html
 ```
 
-## Deploying to GitHub Pages
+## Current production deployment
+
+The production site is deployed from the `main` branch to Cloudflare Pages at [https://pdf-ultra-pro.pages.dev/](https://pdf-ultra-pro.pages.dev/). Cloudflare Pages is connected to this GitHub repository and deploys automatically after pushes to `main`.
+
+## Deploying to GitHub Pages (optional alternative)
 
 1. Create a new GitHub repository and push this folder's contents to the `main` branch (the repo root should contain `index.html`, not a subfolder).
 2. In the repo, go to **Settings → Pages**.
@@ -68,7 +72,7 @@ python3 -m http.server 8080
 4. Under **Branch**, choose `main` and `/ (root)`, then click **Save**.
 5. Wait 1–2 minutes for the first build (check the **Actions** tab for the "pages build and deployment" workflow — if it's still running, that's why the site isn't live yet). Once it finishes, GitHub shows the live URL at the top of the Pages settings page: `https://<your-username>.github.io/<repo-name>/`.
 6. If you see **"There isn't a GitHub Pages site here"**: it almost always means step 3–4 hasn't been completed/saved yet, or the branch you pushed to doesn't match what's selected in Pages settings, or the first deployment is still in progress. Re-check Settings → Pages and the Actions tab.
-7. Update the canonical URLs in each page's `<head>` (currently `https://pdfultrapro.example.com/...`) and the URLs in `robots.txt` / `sitemap.xml` to your real published URL, e.g. `https://yourusername.github.io/pdf-ultra-pro/`.
+7. If you use GitHub Pages instead of Cloudflare Pages, update every canonical and social URL plus `robots.txt` and `sitemap.xml` to the GitHub Pages URL. The current production URLs point to `https://pdf-ultra-pro.pages.dev/`.
 
 ## Submitting to Google Search Console
 
@@ -80,12 +84,12 @@ python3 -m http.server 8080
 ## Adding Google AdSense
 
 1. Sign up at [adsense.google.com](https://adsense.google.com) and get your site approved.
-2. Add your AdSense loader script to the `<head>` of each page (or, more maintainably, add it inside `js/partials.js`'s header injection so it's centralized):
+2. The current HTML pages already include the AdSense loader for publisher ID `ca-pub-8279679003849482`. Keep this ID consistent with the AdSense account that owns the site.
    ```html
    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
    ```
-3. Replace the placeholder `<div class="ad-slot">` elements (in `index.html`, `all-tools.html`, and each tool page) with real `<ins class="adsbygoogle">` ad units per AdSense's instructions.
-4. Update `privacy.html` to disclose the ad network once it's live — the current copy notes this is a placeholder.
+3. The repository includes a root `ads.txt` file for publisher ID `pub-8279679003849482`; verify that `https://pdf-ultra-pro.pages.dev/ads.txt` is publicly reachable and that the publisher ID matches the AdSense account.
+4. The Privacy Policy discloses Google advertising and links to Google's advertising and privacy information. Review the policy for accuracy before applying. AdSense approval is decided by Google and is not guaranteed by the presence of the code.
 
 ## Using a custom domain
 

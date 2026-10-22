@@ -160,6 +160,11 @@ try {
   await assertDownloadAfter("Extract Text & Download", "Extracted text from 1 page.", "text-sample-text.txt");
   console.log("PDF to Text: text extracted from a real sample PDF and a non-empty TXT downloaded.");
 
+  await openTool("/ocr-pdf.html");
+  await uploadPdfFiles([{ name: "ocr-sample.pdf", base64: onePage }]);
+  await assertDownloadAfter("Run OCR & Download", "OCR complete", "ocr-sample-ocr.pdf");
+  console.log("OCR PDF: English OCR completed and a non-empty searchable PDF downloaded.");
+
   await openTool("/pdf-to-jpg.html");
   await uploadPdfFiles([{ name: "image-sample.pdf", base64: onePage }]);
   await assertDownloadAfter("Convert & Download", "Converted 1 page to JPG.", "image-sample-page-1.jpg");

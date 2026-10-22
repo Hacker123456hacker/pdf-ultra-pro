@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8279679003849482"
-     crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8279679003849482" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blog \u2014 PDF Ultra Pro</title>
-<meta name="description" content="Tips, guides and updates about working with PDFs, from the PDF Ultra Pro team.">
+<title>PDF Guides: Merge, Compress, OCR and Protect Your Files | PDF Ultra Pro</title>
+<meta name="description" content="Practical PDF guides covering file privacy, compression trade-offs, page ordering, OCR quality and safe recovery of damaged documents.">
 <link rel="canonical" href="https://pdf-ultra-pro.pages.dev/blog.html">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Practical PDF Guides | PDF Ultra Pro">
+<meta property="og:description" content="Clear, practical guidance for common PDF tasks and their limitations.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pdf-ultra-pro.pages.dev/blog.html">
+<meta property="og:image" content="https://pdf-ultra-pro.pages.dev/images/og-image.svg">
 <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#6C4CF0">
@@ -18,52 +23,97 @@
 <main id="main-content">
   <div class="container">
     <div class="page-hero">
-      <span class="eyebrow">Blog</span>
-      <h1>Guides &amp; updates</h1>
-      <p style="max-width:56ch;margin:0 auto;">Practical tips for working with PDFs, plus notes on what we're building next.</p>
+      <span class="eyebrow">PDF learning centre</span>
+      <h1>Practical guides for working with PDF files</h1>
+      <p style="max-width:68ch;margin:0 auto;">Understand common PDF tasks before you run them: how to keep files private, choose a compression method, prepare a document for printing, improve OCR results, and recover from damaged files. Each guide explains both the steps and the trade-offs.</p>
     </div>
   </div>
   <section class="section section-tight">
-    <div class="container">
-      <div class="blog-grid">
-
-        <article class="blog-card">
-          <div class="blog-cover" aria-hidden="true"></div>
-          <div class="blog-body">
-            <time datetime="2026-07-14">July 14, 2026</time>
-            <h3>Why we never send your PDF to a server</h3>
-            <p>A look at how client-side libraries like pdf-lib and pdf.js make it possible to merge, split and edit PDFs without an upload step — and where that approach still has limits.</p>
-          </div>
-        </article>
-
-        <article class="blog-card">
-          <div class="blog-cover" aria-hidden="true" style="background:linear-gradient(135deg,#3EE0E8,#6C4CF0);"></div>
-          <div class="blog-body">
-            <time datetime="2026-06-02">June 2, 2026</time>
-            <h3>Compressing a PDF without wrecking it</h3>
-            <p>Compression is a trade-off, not a free lunch. Here's what actually happens to a scanned PDF when you shrink it, and how to pick a quality level you won't regret.</p>
-          </div>
-        </article>
-
-        <article class="blog-card">
-          <div class="blog-cover" aria-hidden="true" style="background:linear-gradient(135deg,#6C4CF0,#2ED8A7);"></div>
-          <div class="blog-body">
-            <time datetime="2026-05-11">May 11, 2026</time>
-            <h3>A faster way to reorder pages before printing</h3>
-            <p>Drag-and-drop thumbnails beat typing page ranges every time. A quick walkthrough of the Reorder Pages tool for anyone prepping a booklet or handout.</p>
-          </div>
-        </article>
-
-        <article class="blog-card">
-          <div class="blog-cover" aria-hidden="true" style="background:linear-gradient(135deg,#FFB020,#6C4CF0);"></div>
-          <div class="blog-body">
-            <time datetime="2026-04-20">April 20, 2026</time>
-            <h3>What "Repair PDF" can and can't fix</h3>
-            <p>Corrupted cross-reference tables, truncated files, and broken object streams behave very differently. Here's what a structural rebuild can realistically recover.</p>
-          </div>
-        </article>
-
-      </div>
+    <div class="container prose">
+      <article class="blog-article" id="private-pdf-workflows">
+        <p class="eyebrow">Privacy basics · 5 minute read</p>
+        <h2>How to work with sensitive PDFs more privately</h2>
+        <p>PDFs often contain information that should not be shared casually: payslips, school records, invoices, signed forms, contracts and medical documents. Before choosing a PDF website, check what happens after you select a file. Some services upload a document to a remote server for processing; browser-based tools can instead process supported operations on your own device.</p>
+        <h3>A simple privacy checklist</h3>
+        <ol>
+          <li>Read the service's privacy policy and confirm whether the document is uploaded or processed locally.</li>
+          <li>Use a trusted, up-to-date browser and avoid public or shared devices for confidential work.</li>
+          <li>Choose only the files needed for the task. Close the tab when finished and remove downloaded copies from shared devices.</li>
+          <li>Check the output before sending it. Removing a visible page or adding a black rectangle does not always remove hidden metadata or underlying text.</li>
+          <li>Keep an untouched backup of the original document until you have verified the final result.</li>
+        </ol>
+        <p>PDF Ultra Pro is a static website and supported tools process selected files in the browser. The site still loads page assets, third-party libraries and advertising resources over the network, so ordinary technical requests may be made to those providers. Local processing should not be confused with a guarantee that every part of browsing is offline or anonymous.</p>
+      </article>
+      <hr>
+      <article class="blog-article" id="compress-pdf-guide">
+        <p class="eyebrow">File size · 6 minute read</p>
+        <h2>How to reduce a PDF file size without losing important detail</h2>
+        <p>There is no single compression setting that is best for every PDF. A text-heavy report, a scanned form and a portfolio of photographs contain different kinds of data. The right method depends on whether you care most about readability, searchable text, image quality or a small file for email.</p>
+        <h3>First identify what makes the file large</h3>
+        <ul>
+          <li><strong>Scanned pages and photos:</strong> images often account for most of the file size. Lower image resolution or quality can make a large difference.</li>
+          <li><strong>Selectable text and vector graphics:</strong> these may already be compact. Re-rendering every page as an image can make text blurry and remove searchability.</li>
+          <li><strong>Embedded fonts and attachments:</strong> these may contribute to size, but removing them can change how the document displays or functions.</li>
+        </ul>
+        <h3>A safer workflow</h3>
+        <ol>
+          <li>Keep a copy of the original PDF.</li>
+          <li>Decide how the file will be used: screen reading, printing, archiving or upload to a size-limited form.</li>
+          <li>Try a moderate compression option first and compare the output at normal reading size and at 100% zoom.</li>
+          <li>Check small text, signatures, diagrams, page orientation and page count. If text must remain searchable, use a method that preserves the text layer.</li>
+          <li>Compare the original and compressed file sizes before choosing the final version.</li>
+        </ol>
+        <p>PDF Ultra Pro's image-based compression approach is most useful for scanned or image-heavy PDFs. Because it can rasterize page content, it is not ideal when selectable text or crisp vector artwork must be preserved. Always inspect the result before relying on it.</p>
+      </article>
+      <hr>
+      <article class="blog-article" id="reorder-pages-guide">
+        <p class="eyebrow">Printing and organisation · 4 minute read</p>
+        <h2>Reorder PDF pages before printing or sharing</h2>
+        <p>Scanned packets, merged reports and exported presentations can end up with pages in the wrong order. Fixing the order before printing is usually easier than sorting a paper stack afterwards.</p>
+        <h3>Before you change the order</h3>
+        <ol>
+          <li>Open the PDF preview and note the current page count.</li>
+          <li>Identify the intended sequence, including cover pages, appendices and blank separator pages.</li>
+          <li>Move pages using thumbnails when available, then review the first, middle and last pages to make sure nothing was duplicated or dropped.</li>
+          <li>Save the reordered PDF under a new filename so the original remains available.</li>
+          <li>Open the saved file again and check its page count and orientation before printing or sharing.</li>
+        </ol>
+        <p>For a booklet, page order may depend on the printer's booklet-printing settings; simply arranging pages in reading order does not always create printer-ready imposition. If the document contains confidential information, verify the service's file-handling approach before uploading it to any website.</p>
+      </article>
+      <hr>
+      <article class="blog-article" id="ocr-guide">
+        <p class="eyebrow">Scanned documents · 6 minute read</p>
+        <h2>How to get better OCR results from a scanned PDF</h2>
+        <p>OCR (optical character recognition) attempts to turn text in a picture into selectable, searchable text. It cannot perfectly reconstruct every scan. Results depend on the image quality, language, font, page layout and condition of the original document.</p>
+        <h3>Improve the source before running OCR</h3>
+        <ul>
+          <li>Use a straight, evenly lit scan. Skewed pages, shadows and curved book pages can confuse character recognition.</li>
+          <li>Aim for readable resolution. Very low-resolution images can make similar characters such as O/0, I/l and 5/S difficult to distinguish.</li>
+          <li>Select the correct language when the OCR tool offers language choices. Mixed-language pages may need extra proofreading.</li>
+          <li>Run OCR on a copy, then search for a few known words and inspect names, dates, amounts and other high-impact fields manually.</li>
+        </ul>
+        <p>OCR output should be treated as a draft, not an authoritative transcription. For legal, financial, medical or official documents, verify the recognised text against the page image before using it. If a PDF already contains selectable text, OCR may not be necessary.</p>
+      </article>
+      <hr>
+      <article class="blog-article" id="repair-pdf-guide">
+        <p class="eyebrow">Troubleshooting · 5 minute read</p>
+        <h2>What to do when a PDF will not open</h2>
+        <p>A PDF may fail to open because the download was incomplete, the file extension does not match its contents, the document is damaged, or the viewer does not support a particular feature. A repair tool cannot recover information that was never saved in the file.</p>
+        <h3>Try these steps in order</h3>
+        <ol>
+          <li>Download the file again from its original source and compare its size with the expected download, if available.</li>
+          <li>Make a copy before trying any repair operation.</li>
+          <li>Try opening the copy in a second trusted PDF reader. If only one reader fails, the issue may be compatibility rather than corruption.</li>
+          <li>If the file opens partially, save a new copy from the reader if that option is available, then inspect every page.</li>
+          <li>If the document is important, ask the sender for a fresh export rather than trusting a partially recovered copy.</li>
+        </ol>
+        <p>Structural repair may help with some damaged document indexes, but it cannot guarantee recovery from a truncated or badly corrupted file. Never use a repaired copy as the only copy of an important document; compare the output and keep the original.</p>
+      </article>
+      <section class="feature-panel glass" style="margin-top:32px;">
+        <h2>Choose the right tool for your task</h2>
+        <p>Start with a copy of your file, read the tool's stated limitations, and check the result before sharing or printing.</p>
+        <p><a class="btn btn-primary" href="all-tools.html">Browse PDF tools</a> <a class="btn btn-secondary" href="faq.html">Read the FAQ</a></p>
+      </section>
     </div>
   </section>
 </main>

@@ -38,15 +38,15 @@
       <h2>Privacy &amp; security</h2>
       <details class="faq-item" open>
         <summary class="faq-q">Do you store or see my files?<span class="chev" aria-hidden="true">▾</span></summary>
-        <div class="faq-a"><p>No. There's no server component to this site's core tools \u2014 files are read with your browser's File API, processed in memory using JavaScript libraries, and the result is offered back to you as a download. Nothing is transmitted anywhere.</p></div>
+        <div class="faq-a"><p>Supported file-processing code reads selected files in your browser and is designed to process them locally; the site is not designed to upload those files to our own application server. The page may still make network requests to load scripts, libraries, fonts, hosting resources or advertising. Avoid using the site if your device or browser is not trusted.</p></div>
       </details>
       <details class="faq-item">
         <summary class="faq-q">Can I use this offline?<span class="chev" aria-hidden="true">▾</span></summary>
-        <div class="faq-a"><p>After your first visit, PDF Ultra Pro can be installed as a lightweight app and used offline for previously cached tools, thanks to its service worker and web app manifest.</p></div>
+        <div class="faq-a"><p>You may be able to install the site as an app, but offline availability is limited to resources already cached by your browser. Most tools also depend on external JavaScript libraries, so do not assume every tool will work offline. Test offline mode before relying on it.</p></div>
       </details>
       <details class="faq-item">
         <summary class="faq-q">Is it safe to process sensitive documents here?<span class="chev" aria-hidden="true">▾</span></summary>
-        <div class="faq-a"><p>Because nothing leaves your device, sensitive documents never cross a network in the first place. That said, always keep your own device and browser up to date, since that's the boundary that matters here.</p></div>
+        <div class="faq-a"><p>Supported tools are designed to process selected files locally, rather than upload them to our server. However, this does not mean the entire website makes no network requests: hosting, external libraries and advertising may contact third-party services. For highly sensitive documents, use software you control and have independently verified.</p></div>
       </details>
 
       <h2>Limits &amp; compatibility</h2>
@@ -69,8 +69,8 @@
         <div class="faq-a"><p>Real PDF password protection and removal require robust encryption support that isn't reliably available in the open-source libraries this site uses client-side. We'd rather mark it "Coming soon" than ship something that doesn't actually protect your file.</p></div>
       </details>
       <details class="faq-item">
-        <summary class="faq-q">Why can't I convert Word/Excel/PowerPoint files?<span class="chev" aria-hidden="true">▾</span></summary>
-        <div class="faq-a"><p>Faithfully converting office formats to PDF typically requires a full layout engine (like the one inside Word or LibreOffice). That's not something we can do accurately and safely without a server, so it's on our roadmap rather than in the current tool set.</p></div>
+        <summary class="faq-q">How accurate are Word/Excel/PowerPoint conversions?<span class="chev" aria-hidden="true">▾</span></summary>
+        <div class="faq-a"><p>The current browser-based converters extract supported document or presentation content and create a simplified PDF. They do not reproduce the full layout, fonts, charts, images or slide formatting of Microsoft Office. Check each converter's page description and verify the downloaded PDF before relying on it.</p></div>
       </details>
 
       <h2>Still stuck?</h2>

@@ -1,7 +1,7 @@
 {
   "name": "PDF Ultra Pro — Free Online PDF Tools",
   "short_name": "PDF Ultra Pro",
-  "description": "Merge, split, compress, convert and edit PDFs entirely in your browser. Nothing is ever uploaded to a server.",
+  "description": "Browser-based PDF utilities for merging, splitting, editing and converting supported files. Capabilities and offline availability vary by tool.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

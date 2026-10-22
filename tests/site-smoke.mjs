@@ -92,6 +92,22 @@ try {
     await page.locator(selector).waitFor({ timeout: 20000 });
   }
 
+  const toolPaths = [
+    "merge-pdf.html", "split-pdf.html", "rotate-pdf.html", "delete-pages.html",
+    "extract-pages.html", "reorder-pdf.html", "crop-pdf.html", "watermark-pdf.html",
+    "page-numbers.html", "compress-pdf.html", "pdf-to-jpg.html", "images-to-pdf.html",
+    "pdf-to-text.html", "extract-images.html", "pdf-metadata.html", "preview-pdf.html",
+    "sign-pdf.html", "repair-pdf.html", "compare-pdf.html", "word-to-pdf.html",
+    "excel-to-pdf.html", "ppt-to-pdf.html", "extract-fonts.html", "ocr-pdf.html",
+    "text-to-pdf.html",
+  ];
+  for (const path of toolPaths) {
+    await openTool("/" + path, path === "text-to-pdf.html" ? "#ttp-text" : "#tool-app .dropzone");
+    const toolText = await page.locator(path === "text-to-pdf.html" ? "#text-to-pdf-app" : "#tool-app").innerText();
+    assert.ok(!/coming soon/i.test(toolText), `${path} should initialize as a configured tool`);
+  }
+  console.log("All 25 tool pages initialized without a Coming soon fallback.");
+
   async function makePdf(pageCount = 1) {
     return page.evaluate(async (count) => {
       const { PDFDocument, StandardFonts } = window.PDFLib;
